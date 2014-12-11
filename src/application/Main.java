@@ -5,11 +5,18 @@ import java.util.Random;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -18,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -36,9 +44,19 @@ public class Main extends Application {
 			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("DAISY Pipeline 2");
 			
 			VBox sidebar = createSidebar();
 			root.setLeft(sidebar);
+			
+			MenuBar menubar = createMenu();
+			root.getChildren().addAll(menubar);
+			
+			GridPane detailview = createDetailView();
+			root.setCenter(detailview);
+			
+			VBox msgs = createMessages();
+			root.setBottom(msgs);
 			
 			primaryStage.show();
 		} catch(Exception e) {
@@ -61,7 +79,7 @@ public class Main extends Application {
 
 	    VBox.setVgrow(list, Priority.ALWAYS);
 	    
-        list.setItems(data);
+	    list.setItems(data);
  
         list.setCellFactory(new Callback<ListView<String>, 
             ListCell<String>>() {
@@ -77,6 +95,86 @@ public class Main extends Application {
 	    return vbox;
 	}
 	
+	private MenuBar createMenu() {
+		MenuBar menuBar = new MenuBar();
+		Menu menuFile = new Menu("File");
+        Menu menuEdit = new Menu("Edit");
+        Menu menuView = new Menu("View");
+ 
+        
+        menuBar.getMenus().addAll(menuFile, menuEdit, menuView);
+ 
+        MenuItem newjob = new MenuItem("New job");
+        menuFile.getItems().addAll(newjob);
+        
+        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        	menuBar.setUseSystemMenuBar(true);
+        }
+        
+        if (!System.getProperty("os.name").toLowerCase().contains("mac")) {
+        	MenuItem exit = new MenuItem("Exit");
+        	exit.setOnAction(new EventHandler<ActionEvent>() {
+        	    public void handle(ActionEvent t) {
+        	        System.exit(0);
+        	    }
+        	});
+        	menuFile.getItems().add(exit);
+        }
+        
+        return menuBar;
+	}
+	
+	private GridPane createDetailView() {
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(10));
+		grid.setHgap(10);
+        grid.setVgap(10);
+		
+		Text title = new Text("Job details");
+	    title.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+	    
+	    Text script = new Text("Script: DTBook to ZedAI");
+	    script.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
+	    Text desc = new Text("Converts DTBook to ZedAI");
+	    desc.setFont(Font.font("Arial", FontPosture.ITALIC, 15));
+	    
+	    Text params = new Text("Inputs:\n\tInputFile1.xml\n\tInputFile2.xml \n\nAssert Valid: true\nLanguage: en");
+	    params.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
+	    
+	    grid.add(title, 0, 0);
+	    grid.add(script, 0, 1);
+	    grid.add(desc, 0, 2);
+	    grid.add(params, 0, 3);
+	    
+	    Hyperlink loglink = new Hyperlink();
+	    loglink.setText("Log file");
+	    
+	    Hyperlink outputlink = new Hyperlink();
+	    outputlink.setText("Results");
+	    
+	    grid.add(loglink, 0, 4);
+	    grid.add(outputlink, 0, 5);
+	    
+	    
+	    return grid;
+	    
+	    
+	    
+	}
+	
+	private VBox createMessages() {
+		Text title = new Text("Messages");
+	    title.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+	    
+		String msgs = "INFO lorem ipsum \nINFO lorem ipsum \nINFO lorem ipsum \nINFO lorem ipsum \nINFO lorem ipsum \nINFO lorem ipsum \n";
+		VBox vbox = new VBox();
+		TextArea text = new TextArea();
+		text.setText(msgs);
+		vbox.getChildren().add(title);
+		vbox.getChildren().add(text);
+		return vbox;
+		
+	}
 	static class JobCell extends ListCell<String> {
         @Override
         public void updateItem(String item, boolean empty) {
