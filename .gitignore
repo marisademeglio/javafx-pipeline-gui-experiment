@@ -22,3 +22,9 @@ target/*
 
 .settings/org.eclipse.m2e.core.prefs
 /bin/
+
+dist/
+dist/*
+
+build/
+build/*
