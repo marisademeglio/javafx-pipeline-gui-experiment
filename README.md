@@ -5,10 +5,12 @@ Create a dummy pipeline-like layout using javafx and test it for cross-platform 
 
 Accessibility tests
 ===
-There are four main components in the application: the menus, the sidebar, the details pane (also used as the new job pane), and the messages pane.
+Requires Java 1.8.
 
-Launch the GUI by saving the jar file and running it with this command:
+Launch the GUI with this command from a terminal window:
 java -jar javafx-pipeline-gui-experiment.jar
+
+There are four main components in the application: the menus, the sidebar, the details pane (also used as the new job pane), and the messages pane.
 
 1. Menus
 File: New job, Delete job, Exit (Windows only)
