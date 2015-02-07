@@ -7,6 +7,9 @@ Accessibility tests
 ===
 There are four main components in the application: the menus, the sidebar, the details pane (also used as the new job pane), and the messages pane.
 
+Launch the GUI by saving the jar file and running it with this command:
+java -jar javafx-pipeline-gui-experiment.jar
+
 1. Menus
 File: New job, Delete job, Exit (Windows only)
 Tests: Trigger GUI change #1, Trigger GUI change #2
